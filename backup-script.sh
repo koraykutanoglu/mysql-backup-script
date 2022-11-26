@@ -8,7 +8,7 @@ if [ -f "environment" ]; then
   echo "${separator// /-}"
 
   echo "Environment file is now exporting"
-  export $(cat environment | xargs)
+  export $(cat environment | awk '{print $1}' | tr "#" " ")
 
 
     if [ "$TELEGRAM_NOTIFICATION" == "yes" ]; then

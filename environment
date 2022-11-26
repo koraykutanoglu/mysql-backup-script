@@ -17,7 +17,7 @@ MYSQL_BACKUP_LOCATION=/Users/koray/Desktop/backup
 MYSQL_BACKUP_SEND_TO_REMOTE="yes"
 
 # The IP address of the machine where the backup will be made.
-BACKUP_HOST=34.118.57.xxx
+BACKUP_HOST=34.118.57
 
 # SSH username:
 BACKUP_HOST_USERNAME=root
