@@ -9,7 +9,15 @@ if [ -f "environment" ]; then
 
   echo "Environment file is now exporting"
   export $(cat environment | xargs)
+
+
+    if [ "$TELEGRAM_NOTIFICATION" == "yes" ]; then
+
+      message="🟢 MySQL Databases Backup Is Starting"
+      curl -s --data "text=$message" --data "chat_id=$TELEGRAM_BOT_CHAT_ID" 'https://api.telegram.org/bot'$TELEGRAM_BOT_API'/sendMessage' > /dev/null
   
+    fi
+
   echo "${separator// /-}"
 
   echo "MySQL up and down?"
@@ -68,6 +76,13 @@ if [ -f "environment" ]; then
               scp $MYSQL_BACKUP_LOCATION/$databases$DATE.sql $BACKUP_HOST_USERNAME@$BACKUP_HOST:$BACKUP_HOST_LOCATION
 
               rm -rf $MYSQL_BACKUP_LOCATION/$databases$DATE.sql
+              
+                if [ "$TELEGRAM_NOTIFICATION" == "yes" ]; then
+
+                  message="MySQL $databases$DATE.sql database backed up"
+                  curl -s --data "text=$message" --data "chat_id=$TELEGRAM_BOT_CHAT_ID" 'https://api.telegram.org/bot'$TELEGRAM_BOT_API'/sendMessage' > /dev/null
+                
+                fi
 
               echo "${separator// /-}"
 
@@ -90,6 +105,14 @@ if [ -f "environment" ]; then
                 echo "${separator// /-}"
       
                 mysqldump -h $MYSQL_HOST -u$MYSQL_USERNAME -p$MYSQL_PASSWORD $databases > $MYSQL_BACKUP_LOCATION/$databases$DATE.sql
+
+
+                  if [ "$TELEGRAM_NOTIFICATION" == "yes" ]; then
+                    
+                    message="MySQL $databases$DATE.sql database backed up"
+                    curl -s --data "text=$message" --data "chat_id=$TELEGRAM_BOT_CHAT_ID" 'https://api.telegram.org/bot'$TELEGRAM_BOT_API'/sendMessage' > /dev/null
+                  
+                  fi
 
                 echo "${separator// /-}"
 
@@ -123,6 +146,13 @@ if [ -f "environment" ]; then
 
         echo "deleted $BACKUP_HOST_BACKUP_RETENTION_MINUTE minute before"
 
+        if [ "$TELEGRAM_NOTIFICATION" == "yes" ]; then
+
+        message="🟢 MySQL Databases Backup Is Completed"
+        curl -s --data "text=$message" --data "chat_id=$TELEGRAM_BOT_CHAT_ID" 'https://api.telegram.org/bot'$TELEGRAM_BOT_API'/sendMessage' > /dev/null
+        
+        fi
+
         exit 1
         
       fi
@@ -131,6 +161,13 @@ if [ -f "environment" ]; then
     
     fi
   
+    if [ "$TELEGRAM_NOTIFICATION" == "yes" ]; then
+
+      message="🔴 MySQL Is Not Running! Backup Is Stopped"
+      curl -s --data "text=$message" --data "chat_id=$TELEGRAM_BOT_CHAT_ID" 'https://api.telegram.org/bot'$TELEGRAM_BOT_API'/sendMessage' > /dev/null
+
+    fi
+
   echo "MySQL is not running!"
   exit 1
 
