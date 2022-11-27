@@ -38,7 +38,11 @@ SEQUENTIAL_DELIVERY="yes"
 TELEGRAM_NOTIFICATION="yes"
 
 # What is the API of the Telegram bot?
-TELEGRAM_BOT_API=xxxxxxxx
+TELEGRAM_BOT_API=xxxxxx
 
 # What is the ID of the chat that the Telegram bot will send messages to?
-TELEGRAM_BOT_CHAT_ID=xxxxxxxx
+TELEGRAM_BOT_CHAT_ID=xxxxx
+
+# MYSQL DATABASES IMPORT OPTIONS
+LOCAL_BACKUP_IMPORT="yes"
+REMOTE_BACKUP_IMPORT="yes"
