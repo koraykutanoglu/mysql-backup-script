@@ -65,6 +65,18 @@ TELEGRAM_BOT_API=xxxxxxxx
 
 # What is the ID of the chat that the Telegram bot will send messages to?
 TELEGRAM_BOT_CHAT_ID=xxxxxxxx
+
+# DATABASE IMPORT ----------------------------------------------------------------------
+
+# This part is used to restore backups. The following two options cannot be yes or no on the mirror. The LOCAL_BACKUP_IMPORT option restores local backups. The REMOTE_BACKUP_IMPORT option imports and uploads backups from the remote server to itself.
+LOCAL_BACKUP_IMPORT="no"
+REMOTE_BACKUP_IMPORT="yes"
+
+# The LOCAL_BACKUP_DIRECTORY option takes effect when the LOCAL_BACKUP_IMPORT option is set to yes. You need to enter that directory where the backups are to be installed.
+LOCAL_BACKUP_DIRECTORY=/Users/koray/Desktop/backup
+
+# The LOCAL_BACKUP_WORKING_DIRECTORY option works when the REMOTE_BACKUP_IMPORT option is yes. You need to specify where the files pulled from the remote server will be transferred locally.
+LOCAL_BACKUP_WORKING_DIRECTORY=/Users/koray/Desktop/backup/cekilecekyedekler
 ```
 
 - After editing the environment file, save and exit and set a cron. Here we set hourly cron by default. We create a file. (If you want daily or weekly: /etc/cron.weekly, /etc/cron.daily)
