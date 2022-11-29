@@ -37,25 +37,15 @@ if [ -f "environment" ]; then
 
       echo "${separator// /-}"
 
-      echo "check backup retention"
-
-      echo "${separator// /-}"
-
-      echo "deleting $RETENTION_MINUTE minute before"
- 
-      find $MYSQL_BACKUP_LOCATION/* -mmin +$RETENTION_MINUTE -delete
-
-      echo "${separator// /-}"
-
-      echo "deleted $RETENTION_MINUTE minute before"
-
-
-
       if [ "$MYSQL_BACKUP_SEND_TO_REMOTE" == "yes" ]; then
 
         echo "backup is sending"
+        echo "${separator// /-}"
+        echo "Check SSH information if script is waiting here."
+        echo "${separator// /-}"
 
         ssh $BACKUP_HOST_USERNAME@$BACKUP_HOST "mkdir -p $BACKUP_HOST_LOCATION"
+
 
           if [ "$SEQUENTIAL_DELIVERY" == "yes" ]; then
 

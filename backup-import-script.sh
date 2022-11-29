@@ -56,6 +56,12 @@ if [ -f "environment" ]; then
 
           done
 
+          if [ "$DELETE_THE_BACKUP_AFTER_INSTALLING" == "yes" ]; then
+
+            rm -rf $LOCAL_BACKUP_DIRECTORY/*.sql
+  
+          fi 
+
           if [ "$TELEGRAM_NOTIFICATION" == "yes" ]; then
 
             message="🟢 MySQL Databases Import Is Completed."
@@ -93,7 +99,40 @@ if [ -f "environment" ]; then
         else
 
           if [ "$REMOTE_BACKUP_IMPORT" == "yes" ]; then
+  
+            if [ "$REMOTE_BACKUP_IMPORT_SEQUENTIAL_DELIVERY" == "yes" ]; then
 
+              echo "Backups on the remote server will be loaded. The process is starting."
+              echo "Backups on the remote machine will be transferred to the local machine."
+
+              for databasesi in $(ssh $BACKUP_HOST_USERNAME@$BACKUP_HOST "ls $BACKUP_HOST_LOCATION"); do 
+                
+                cd $LOCAL_BACKUP_WORKING_DIRECTORY
+                scp $BACKUP_HOST_USERNAME@$BACKUP_HOST:$BACKUP_HOST_LOCATION/$databasesi .
+                databasename=$(echo $databasesi | tr '+' ' ' | awk '{print $1}')
+                mysql -h $MYSQL_HOST -u$MYSQL_USERNAME -p$MYSQL_PASSWORD $databasename < $LOCAL_BACKUP_WORKING_DIRECTORY/$databasesi
+                echo "${separator// /-}"
+                echo $databasename database imported.
+                echo "${separator// /-}"
+                echo $databasename database removed.
+                rm -rf $LOCAL_BACKUP_WORKING_DIRECTORY/$databasesi
+
+              done
+
+            if [ "$TELEGRAM_NOTIFICATION" == "yes" ]; then
+
+              message="🟢 MySQL Databases Import Is Completed."
+              curl -s --data "text=$message" --data "chat_id=$TELEGRAM_BOT_CHAT_ID" 'https://api.telegram.org/bot'$TELEGRAM_BOT_API'/sendMessage' > /dev/null
+  
+            fi  
+            
+            echo "${separator// /-}"
+            echo "MySQL Databases Import Is Completed."
+
+            exit 1 
+
+            fi
+            
             echo "Backups on the remote server will be loaded. The process is starting."
             echo "Backups on the remote machine will be transferred to the local machine."
             cd $LOCAL_BACKUP_WORKING_DIRECTORY
@@ -108,6 +147,12 @@ if [ -f "environment" ]; then
               echo "${separator// /-}"
 
             done
+
+            if [ "$DELETE_THE_BACKUP_AFTER_INSTALLING" == "yes" ]; then
+
+              rm -rf $LOCAL_BACKUP_WORKING_DIRECTORY/*.sql
+  
+            fi 
 
             if [ "$TELEGRAM_NOTIFICATION" == "yes" ]; then
 

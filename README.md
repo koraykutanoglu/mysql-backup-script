@@ -77,6 +77,12 @@ LOCAL_BACKUP_DIRECTORY=/Users/koray/Desktop/backup
 
 # The LOCAL_BACKUP_WORKING_DIRECTORY option works when the REMOTE_BACKUP_IMPORT option is yes. You need to specify where the files pulled from the remote server will be transferred locally.
 LOCAL_BACKUP_WORKING_DIRECTORY=/Users/koray/Desktop/backup/cekilecekyedekler
+
+# Delete backups after import?
+DELETE_THE_BACKUP_AFTER_INSTALLING="yes"
+
+# Should backups be sequentially imported? So, take the backup, install the backup, delete the backup steps?
+REMOTE_BACKUP_IMPORT_SEQUENTIAL_DELIVERY="yes"
 ```
 
 - After editing the environment file, save and exit and set a cron. Here we set hourly cron by default. We create a file. (If you want daily or weekly: /etc/cron.weekly, /etc/cron.daily)
