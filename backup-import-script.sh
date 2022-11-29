@@ -14,7 +14,6 @@ if [ -f "environment" ]; then
     curl -s --data "text=$message" --data "chat_id=$TELEGRAM_BOT_CHAT_ID" 'https://api.telegram.org/bot'$TELEGRAM_BOT_API'/sendMessage' > /dev/null
   
   fi
-  
 
   echo "${separator// /-}"
   echo "MySQL up and down?"
@@ -37,7 +36,7 @@ if [ -f "environment" ]; then
         if [ "$REMOTE_BACKUP_IMPORT" == "no" ]; then
 
           echo "${separator// /-}"
-          echo "local backup işlemleri yapılıyor"
+          echo "Loading Local Backups is Starting."
           echo "${separator// /-}"
           
           for databasesi in $(ls $LOCAL_BACKUP_DIRECTORY); do 
@@ -48,12 +47,9 @@ if [ -f "environment" ]; then
             echo $databasename database imported
             echo "${separator// /-}"
 
-            
           done
 
-
           exit 1
-
 
         else
 
@@ -77,8 +73,23 @@ if [ -f "environment" ]; then
 
           if [ "$REMOTE_BACKUP_IMPORT" == "yes" ]; then
 
-            echo "remote backup import işlemi başlıyor"
-          
+            echo "Backups on the remote server will be loaded. The process is starting."
+            echo "Backups on the remote machine will be transferred to the local machine."
+            cd $LOCAL_BACKUP_WORKING_DIRECTORY
+            scp $BACKUP_HOST_USERNAME@$BACKUP_HOST:$BACKUP_HOST_LOCATION/*.sql .
+
+            for databasesi in $(ls $LOCAL_BACKUP_WORKING_DIRECTORY); do 
+
+              databasename=$(echo $databasesi | tr '+' ' ' | awk '{print $1}')
+              mysql -h $MYSQL_HOST -u$MYSQL_USERNAME -p$MYSQL_PASSWORD $databasename < $LOCAL_BACKUP_WORKING_DIRECTORY/$databasesi
+              echo "${separator// /-}"
+              echo $databasename database imported
+              echo "${separator// /-}"
+
+            done
+
+            exit 1
+
           else
 
             echo "You should set the value to yes or no!"
