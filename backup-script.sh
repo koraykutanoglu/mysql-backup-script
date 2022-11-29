@@ -111,6 +111,7 @@ if [ -f "environment" ]; then
             done
 
               scp $MYSQL_BACKUP_LOCATION/* $BACKUP_HOST_USERNAME@$BACKUP_HOST:$BACKUP_HOST_LOCATION
+              rm -rf $MYSQL_BACKUP_LOCATION/*.sql
 
           fi
 
@@ -130,7 +131,7 @@ if [ -f "environment" ]; then
 
         echo "deleting $BACKUP_HOST_BACKUP_RETENTION_MINUTE minute before"
  
-        ssh $BACKUP_HOST_USERNAME@$BACKUP_HOST "find $BACKUP_HOST_LOCATION/* -mmin +$BACKUP_HOST_BACKUP_RETENTION_MINUTE -delete"
+        ssh $BACKUP_HOST_USERNAME@$BACKUP_HOST "find $BACKUP_HOST_LOCATION/*.sql -mmin +$BACKUP_HOST_BACKUP_RETENTION_MINUTE -delete"
 
         echo "${separator// /-}"
 
