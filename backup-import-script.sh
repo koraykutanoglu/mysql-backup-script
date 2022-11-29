@@ -28,6 +28,13 @@ if [ -f "environment" ]; then
 
       if [ "$REMOTE_BACKUP_IMPORT" == "yes" ]; then
 
+        if [ "$TELEGRAM_NOTIFICATION" == "yes" ]; then
+
+          message="🔴 You cannot set the LOCAL_BACKUP_IMPORT and REMOTE_BACKUP_IMPORT definitions to yes or no at the same time."
+          curl -s --data "text=$message" --data "chat_id=$TELEGRAM_BOT_CHAT_ID" 'https://api.telegram.org/bot'$TELEGRAM_BOT_API'/sendMessage' > /dev/null
+  
+        fi  
+
         echo "You cannot set the LOCAL_BACKUP_IMPORT and REMOTE_BACKUP_IMPORT definitions to yes or no at the same time."
         exit 1
 
@@ -49,6 +56,13 @@ if [ -f "environment" ]; then
 
           done
 
+          if [ "$TELEGRAM_NOTIFICATION" == "yes" ]; then
+
+            message="🟢 MySQL Databases Import Is Completed."
+            curl -s --data "text=$message" --data "chat_id=$TELEGRAM_BOT_CHAT_ID" 'https://api.telegram.org/bot'$TELEGRAM_BOT_API'/sendMessage' > /dev/null
+  
+          fi
+
           exit 1
 
         else
@@ -65,6 +79,13 @@ if [ -f "environment" ]; then
       if [ "$LOCAL_BACKUP_IMPORT" == "no" ]; then
 
         if [ "$REMOTE_BACKUP_IMPORT" == "no" ]; then
+
+          if [ "$TELEGRAM_NOTIFICATION" == "yes" ]; then
+
+            message="🔴 You cannot set the LOCAL_BACKUP_IMPORT and REMOTE_BACKUP_IMPORT definitions to yes or no at the same time."
+            curl -s --data "text=$message" --data "chat_id=$TELEGRAM_BOT_CHAT_ID" 'https://api.telegram.org/bot'$TELEGRAM_BOT_API'/sendMessage' > /dev/null
+  
+          fi  
 
           echo "You cannot set the LOCAL_BACKUP_IMPORT and REMOTE_BACKUP_IMPORT definitions to yes or no at the same time."
           exit 1
@@ -88,9 +109,23 @@ if [ -f "environment" ]; then
 
             done
 
+            if [ "$TELEGRAM_NOTIFICATION" == "yes" ]; then
+
+              message="🟢 MySQL Databases Import Is Completed."
+              curl -s --data "text=$message" --data "chat_id=$TELEGRAM_BOT_CHAT_ID" 'https://api.telegram.org/bot'$TELEGRAM_BOT_API'/sendMessage' > /dev/null
+  
+            fi            
+
             exit 1
 
           else
+
+            if [ "$TELEGRAM_NOTIFICATION" == "yes" ]; then
+
+              message="🔴 You should set the value to yes or no!."
+              curl -s --data "text=$message" --data "chat_id=$TELEGRAM_BOT_CHAT_ID" 'https://api.telegram.org/bot'$TELEGRAM_BOT_API'/sendMessage' > /dev/null
+  
+            fi   
 
             echo "You should set the value to yes or no!"
             exit 1            
@@ -100,6 +135,13 @@ if [ -f "environment" ]; then
         fi   
 
       else 
+
+        if [ "$TELEGRAM_NOTIFICATION" == "yes" ]; then
+
+          message="🔴 You should set the value to yes or no!."
+          curl -s --data "text=$message" --data "chat_id=$TELEGRAM_BOT_CHAT_ID" 'https://api.telegram.org/bot'$TELEGRAM_BOT_API'/sendMessage' > /dev/null
+  
+        fi  
 
         echo "You should set the value to yes or no!"
         exit 1
