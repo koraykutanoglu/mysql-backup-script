@@ -27,8 +27,6 @@ if [ -f "environment" ]; then
     
     if [ "$LOCAL_BACKUP_IMPORT" == "yes" ]; then
 
-    echo "burada"
-
       if [ "$REMOTE_BACKUP_IMPORT" == "yes" ]; then
 
         echo "You cannot set the LOCAL_BACKUP_IMPORT and REMOTE_BACKUP_IMPORT definitions to yes or no at the same time."
@@ -38,11 +36,28 @@ if [ -f "environment" ]; then
 
         if [ "$REMOTE_BACKUP_IMPORT" == "no" ]; then
 
+          echo "${separator// /-}"
           echo "local backup işlemleri yapılıyor"
+          echo "${separator// /-}"
+          
+          for databasesi in $(ls $LOCAL_BACKUP_DIRECTORY); do 
+
+            databasename=$(echo $databasesi | tr '+' ' ' | awk '{print $1}')
+            mysql -h $MYSQL_HOST -u$MYSQL_USERNAME -p$MYSQL_PASSWORD $databasename < $LOCAL_BACKUP_DIRECTORY/$databasesi
+            echo "${separator// /-}"
+            echo $databasename database imported
+            echo "${separator// /-}"
+
+            
+          done
+
+
+          exit 1
+
 
         else
 
-        echo "You should set the value to yes or no!2"
+        echo "You should set the value to yes or no!"
         exit 1
         
         fi
@@ -75,7 +90,7 @@ if [ -f "environment" ]; then
 
       else 
 
-        echo "You should set the value to yes or no!3"
+        echo "You should set the value to yes or no!"
         exit 1
 
       fi

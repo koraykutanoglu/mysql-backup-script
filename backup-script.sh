@@ -71,15 +71,15 @@ if [ -f "environment" ]; then
 
               echo "${separator// /-}"
       
-              mysqldump -h $MYSQL_HOST -u$MYSQL_USERNAME -p$MYSQL_PASSWORD $databases > $MYSQL_BACKUP_LOCATION/$databases$DATE.sql
+              mysqldump -h $MYSQL_HOST -u$MYSQL_USERNAME -p$MYSQL_PASSWORD $databases > $MYSQL_BACKUP_LOCATION/$databases+$DATE.sql
 
-              scp $MYSQL_BACKUP_LOCATION/$databases$DATE.sql $BACKUP_HOST_USERNAME@$BACKUP_HOST:$BACKUP_HOST_LOCATION
+              scp $MYSQL_BACKUP_LOCATION/$databases+$DATE.sql $BACKUP_HOST_USERNAME@$BACKUP_HOST:$BACKUP_HOST_LOCATION
 
-              rm -rf $MYSQL_BACKUP_LOCATION/$databases$DATE.sql
+              rm -rf $MYSQL_BACKUP_LOCATION/$databases+$DATE.sql
               
                 if [ "$TELEGRAM_NOTIFICATION" == "yes" ]; then
 
-                  message="MySQL $databases$DATE.sql database backed up"
+                  message="MySQL $databases+$DATE.sql database backed up"
                   curl -s --data "text=$message" --data "chat_id=$TELEGRAM_BOT_CHAT_ID" 'https://api.telegram.org/bot'$TELEGRAM_BOT_API'/sendMessage' > /dev/null
                 
                 fi
@@ -104,12 +104,12 @@ if [ -f "environment" ]; then
 
                 echo "${separator// /-}"
       
-                mysqldump -h $MYSQL_HOST -u$MYSQL_USERNAME -p$MYSQL_PASSWORD $databases > $MYSQL_BACKUP_LOCATION/$databases$DATE.sql
+                mysqldump -h $MYSQL_HOST -u$MYSQL_USERNAME -p$MYSQL_PASSWORD $databases > $MYSQL_BACKUP_LOCATION/$databases+$DATE.sql
 
 
                   if [ "$TELEGRAM_NOTIFICATION" == "yes" ]; then
                     
-                    message="MySQL $databases$DATE.sql database backed up"
+                    message="MySQL $databases+$DATE.sql database backed up"
                     curl -s --data "text=$message" --data "chat_id=$TELEGRAM_BOT_CHAT_ID" 'https://api.telegram.org/bot'$TELEGRAM_BOT_API'/sendMessage' > /dev/null
                   
                   fi
@@ -130,7 +130,7 @@ if [ -f "environment" ]; then
 
         echo "${separator// /-}"
 
-        rm -rf $MYSQL_BACKUP_LOCATION/*
+#        rm -rf $MYSQL_BACKUP_LOCATION/*
 
         echo "${separator// /-}"
         
